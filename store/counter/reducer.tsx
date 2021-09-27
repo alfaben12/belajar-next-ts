@@ -1,6 +1,6 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER, CounterState } from './type';
 
-const initialState:CounterState = {
+const initialState: CounterState = {
   counter: 0,
 };
 

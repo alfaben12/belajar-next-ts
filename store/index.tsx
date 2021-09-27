@@ -5,11 +5,13 @@ import { createWrapper } from 'next-redux-wrapper';
 import thunkMiddleware from 'redux-thunk';
 import counter from './counter/reducer';
 import incdec from './incdec/reducer';
+import authentication from './authentication/reducer';
 
 // COMBINING ALL REDUCERS
 const combinedReducer = combineReducers({
   counter,
   incdec,
+  authentication,
   // OTHER REDUCERS WILL BE ADDED HERE
 });
 
@@ -31,9 +33,11 @@ const makeStore = ({ isServer }) => {
   const { persistStore, persistReducer } = require('redux-persist');
   const storage = require('redux-persist/lib/storage').default;
 
+  // only counter will be persisted, add other reducers if needed
   const persistConfig = {
     key: 'nextjs',
-    whitelist: ['counter'], // only counter will be persisted, add other reducers if needed
+    whitelist: ['counter', 'incdec',
+      'authentication'],
     storage, // if needed, use a safer storage
   };
 

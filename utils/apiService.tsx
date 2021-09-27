@@ -1,16 +1,22 @@
 import axios from 'axios';
-import { parseCookies } from 'nookies';
+import nookies, { parseCookies } from 'nookies';
 
-const httpClient = axios.create({
-  baseURL: 'https://api.checkoutaja.com/v1/',
-});
+export default function apiService(ctx) {
+  const httpClient = axios.create({
+    baseURL: 'https://api.checkoutaja.com/v1/',
+  });
 
-httpClient.interceptors.request.use((config) => {
-  const newConfig = config;
-  const jwt = parseCookies()['jwt-token'];
-  newConfig.headers.Authorization = jwt ? `Bearer ${jwt}` : '<empty>';
-  return newConfig;
-});
+  const cookies = nookies.get(ctx);
+  let jwt = cookies['jwt-token'];
+  if (jwt === undefined) {
+    jwt = parseCookies()['jwt-token'];
+  }
 
-const apiService = httpClient;
-export default apiService;
+  httpClient.interceptors.request.use((config) => {
+    const newConfig = config;
+    newConfig.headers.Authorization = jwt ? `Bearer ${jwt}` : '<empty>';
+    return newConfig;
+  });
+
+  return httpClient;
+}

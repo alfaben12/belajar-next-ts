@@ -1,6 +1,71 @@
+import { Line } from 'react-chartjs-2';
 import Layout from '../../components/Layout';
+import { DashboardResponse } from '../../lib/types/dashboard/type';
+import apiService from '../../utils/apiService';
 
-export default function Blog() {
+interface DashboardProps {
+  isEmpty: boolean,
+  dashboard: DashboardResponse
+}
+
+export default function Dashboard(props: DashboardProps) {
+  const { isEmpty, dashboard } = props;
+
+  const data = {
+    labels: ['JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MEI',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OKT',
+      'NOV',
+      'DES'],
+    datasets: [
+      {
+        label: 'Product Sell',
+        data: dashboard.count_product_sell_yearly,
+        fill: false,
+        backgroundColor: 'rgb(54, 162, 235)',
+        borderColor: 'rgba(54, 162, 235, 0.2)',
+        yAxisID: 'y-axis-2',
+      },
+      {
+        label: 'Sales',
+        data: dashboard.count_order_yearly,
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
+        yAxisID: 'y-axis-1',
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          id: 'y-axis-1',
+        },
+        {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          id: 'y-axis-2',
+          gridLines: {
+            drawOnArea: false,
+          },
+        },
+      ],
+    },
+  };
+
   return (
     <Layout>
       <div className="container px-6 mx-auto grid">
@@ -16,6 +81,11 @@ export default function Blog() {
           </div>
           <span>View more →</span>
         </a>
+        <div className="w-full overflow-hidden rounded-lg shadow-xs">
+          <div className="bg-white shadow-md rounded my-6">
+            <Line data={data} options={options} />
+          </div>
+        </div>
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
           <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div className="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
@@ -25,10 +95,10 @@ export default function Blog() {
             </div>
             <div>
               <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total clients
+                Count Order
               </p>
               <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                6389
+                {dashboard.count_order}
               </p>
             </div>
           </div>
@@ -40,10 +110,10 @@ export default function Blog() {
             </div>
             <div>
               <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                Account balance
+                {dashboard.balance}
               </p>
               <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                $ 46,760.89
+                0
               </p>
             </div>
           </div>
@@ -55,10 +125,10 @@ export default function Blog() {
             </div>
             <div>
               <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                New sales
+                Sales
               </p>
               <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                376
+                {dashboard.total_order}
               </p>
             </div>
           </div>
@@ -70,346 +140,157 @@ export default function Blog() {
             </div>
             <div>
               <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                Pending contacts
+                New Customer
               </p>
               <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                35
+                0
               </p>
             </div>
           </div>
         </div>
 
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
-          <div className="w-full overflow-x-auto">
-            <table className="w-full whitespace-no-wrap">
+          <div className="bg-white shadow-md rounded my-6">
+            <table className="min-w-max w-full table-auto">
               <thead>
-                <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                  <th className="px-4 py-3">Client</th>
-                  <th className="px-4 py-3">Amount</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Date</th>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">Invoice</th>
+                  <th className="py-3 px-6 text-left">Email</th>
+                  <th className="py-3 px-6 text-left">Amount</th>
+                  <th className="py-3 px-6 text-center">Status</th>
+                  <th className="py-3 px-6 text-center">Payment</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Hans Burger</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          10x Developer
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
+              <tbody className="text-gray-600 text-sm font-light">
+                {dashboard.last_order_sell.map((order) => (
+                  <>
+                    <tr key={order.id} className="border-b border-gray-200 bg-gray-50 hover:bg-gray-100">
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center">
+                          <span className="font-medium">{order.invoice}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center">
+                          <div className="mr-2">
+                            <img
+                              alt={order.email}
+                              className="w-6 h-6 rounded-full"
+                              src={`https://dummyimage.com/1000x1000/2564eb/ffffff.jpg&text=${order.email.charAt(0).toLocaleUpperCase()}`}
+                            />
+                          </div>
+                          <span>{order.email}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <span className="font-medium">
+                          {`Rp. ${order.grand_total}`}
+                        </span>
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">{order.status}</span>
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center justify-center">
+                          <div className="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
+                            <a target="_blank" rel="noreferrer" href={order.payment_url}>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
 
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;facepad=3&amp;fit=facearea&amp;s=707b9c33066bf8808c934c8ab394dff6" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Jolina Angelie</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Unemployed
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 369.95
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
-                      Pending
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1551069613-1904dbdcda11?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Sarah Curry</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Designer
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 86.00
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                      Denied
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1551006917-3b4c078c47c9?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Rulia Joberts</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Actress
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 1276.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1546456073-6712f79251bb?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Wenzel Dashington</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Actor
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                      Expired
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1502720705749-871143f0e671?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;s=b8377ca9f985d80264279f277f3a67f5" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Dave Li</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Influencer
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Maria Ramovic</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Runner
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/photo-1566411520896-01e7ca4726af?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Hitney Wouston</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Singer
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
-
-                <tr className="text-gray-700 dark:text-gray-400">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center text-sm">
-                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">Hans Burger</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          10x Developer
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    $ 863.45
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Approved
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    6/10/2020
-                  </td>
-                </tr>
+                  </>
+                ))}
               </tbody>
             </table>
           </div>
-          <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span className="flex items-center col-span-3">
-              Showing 21-30 of 100
-            </span>
-            <span className="col-span-2" />
-            <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-              <nav aria-label="Table navigation">
-                <ul className="inline-flex items-center">
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-blue" aria-label="Previous">
-                      <svg aria-hidden="true" className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" fillRule="evenodd" />
-                      </svg>
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      1
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      2
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 text-white transition-colors duration-150 bg-blue-600 border border-r-0 border-blue-600 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      3
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      4
-                    </button>
-                  </li>
-                  <li>
-                    <span className="px-3 py-1">...</span>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      8
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue">
-                      9
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" className="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-blue" aria-label="Next">
-                      <svg className="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
-                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" fillRule="evenodd" />
-                      </svg>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </span>
-          </div>
         </div>
 
-        <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Charts
-        </h2>
+        <div className="w-full overflow-hidden rounded-lg shadow-xs">
+          <div className="bg-white shadow-md rounded my-6">
+            <table className="min-w-max w-full table-auto">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">Name</th>
+                  <th className="py-3 px-6 text-center">Qty</th>
+                  <th className="py-3 px-6 text-left">Total</th>
+                  <th className="py-3 px-6 text-left">Price</th>
+                  <th className="py-3 px-6 text-center">Visit</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 text-sm font-light">
+                {dashboard.last_product_sell.map((item) => (
+                  <>
+                    <tr key={item.id} className="border-b border-gray-200 bg-gray-50 hover:bg-gray-100">
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center">
+                          <div className="mr-2">
+                            <img
+                              alt={item.product.name}
+                              className="w-6 h-6 rounded-full"
+                              src={JSON.parse(item.product.media)[0]}
+                            />
+                          </div>
+                          <span>{item.product.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center justify-center">
+                          <span className="font-medium">
+                            {`x${item.qty}`}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center justify-start">
+                          <span className="font-medium">
+                            {`Rp. ${item.product.price}`}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center justify-start">
+                          <span className="font-medium">
+                            {`Rp. ${item.total_price}`}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <div className="flex items-center justify-center">
+                          <span className="font-medium">
+                            {`${item.product.count_visit}x`}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: any) => {
+  const dashboardReq = await apiService(ctx).get('dashboards/statistic', {
+    params: {
+      year: 2021,
+    },
+  });
+
+  const dashboardRes: DashboardResponse = dashboardReq.data;
+  return {
+    props: {
+      isEmpty: false,
+      dashboard: dashboardRes,
+    },
+  };
+};
